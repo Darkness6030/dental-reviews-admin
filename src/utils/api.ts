@@ -247,7 +247,7 @@ export const testPrompt = async (promptData: PromptRequest): Promise<string> => 
 }
 
 export const getReviewsDashboard = async (dateAfter?: string, dateBefore?: string): Promise<ReviewsDashboardResponse> => {
-  const { data } = await client.get("/reviews/dashboard", {
+  const { data } = await client.get("/dashboard", {
     params: {
       date_after: dateAfter,
       date_before: dateBefore,
@@ -258,7 +258,7 @@ export const getReviewsDashboard = async (dateAfter?: string, dateBefore?: strin
 };
 
 export const exportReviewsFile = async (dateAfter?: string, dateBefore?: string): Promise<void> => {
-  const response = await client.get("/reviews/export", {
+  const response = await client.get("/export/reviews", {
     params: {
       date_after: dateAfter,
       date_before: dateBefore,
@@ -270,7 +270,7 @@ export const exportReviewsFile = async (dateAfter?: string, dateBefore?: string)
 };
 
 export const exportComplaintsFile = async (dateAfter?: string, dateBefore?: string): Promise<void> => {
-  const response = await client.get("/complaints/export", {
+  const response = await client.get("/export/complaints", {
     params: {
       date_after: dateAfter,
       date_before: dateBefore,
