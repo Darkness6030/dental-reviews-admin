@@ -20,7 +20,7 @@ const emptyFormData: UserRequest = {
   username: "",
   password: "",
   is_admin: false,
-  avatar_url: undefined,
+  avatar_url: null,
 };
 
 export default function UsersPage() {
@@ -328,7 +328,7 @@ export default function UsersPage() {
                       onClick={() =>
                         setFormData((value) => ({
                           ...value,
-                          avatar_url: undefined,
+                          avatar_url: null,
                         }))
                       }
                       className="rounded-xl bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-200"

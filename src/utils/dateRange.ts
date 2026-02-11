@@ -42,6 +42,6 @@ export function getDateRange(rangeKey: DateRangeKey): { fromDate: Date | undefin
       return { fromDate: startOfDay(startOfMonth), toDate: endOfDay(now) };
 
     default:
-      return { fromDate: undefined, toDate: undefined }; // Возвращаем undefined вместо null
+      return { fromDate: undefined, toDate: undefined };
   }
 }

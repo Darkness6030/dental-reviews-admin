@@ -19,7 +19,7 @@ type RewardsContext = {
 
 const emptyFormData: RewardRequest = {
   name: "",
-  image_url: undefined,
+  image_url: null,
   is_enabled: true,
 };
 
@@ -347,7 +347,7 @@ export default function RewardsPage() {
                       onClick={() =>
                         setFormData((value) => ({
                           ...value,
-                          image_url: undefined,
+                          image_url: null,
                         }))
                       }
                       className="rounded-xl bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-200"

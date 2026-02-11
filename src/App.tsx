@@ -14,7 +14,7 @@ import type {
   Source,
   User
 } from "./types";
-import { getUser, removeAccessToken } from "./utils/api";
+import { getCurrentUser, removeAccessToken } from "./utils/api";
 
 export default function App() {
   const [doctors, setDoctors] = useState<Doctor[]>([]);
@@ -40,7 +40,7 @@ export default function App() {
     const fetchUser = async () => {
       try {
         setIsUserLoading(true);
-        const user = await getUser();
+        const user = await getCurrentUser();
         setCurrentUser(user);
       } catch (error) {
         setCurrentUser(null);

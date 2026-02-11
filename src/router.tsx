@@ -11,6 +11,7 @@ import RewardsPage from "./pages/RewardsPage"
 import ServicesPage from "./pages/ServicesPage"
 import SourcesPage from "./pages/SourcesPage"
 import UsersPage from "./pages/UsersPage"
+import ProfilePage from "./pages/ProfilePage"
 
 export const router = createBrowserRouter([
     {
@@ -20,6 +21,7 @@ export const router = createBrowserRouter([
             { index: true, element: <DashboardPage /> },
             { path: "analytics", element: <DashboardPage mode="analytics" /> },
             { path: "login", element: <LoginPage /> },
+            { path: "profile", element: <ProfilePage /> },
             { path: "doctors", element: <DoctorsPage /> },
             { path: "services", element: <ServicesPage /> },
             { path: "aspects", element: <AspectsPage /> },

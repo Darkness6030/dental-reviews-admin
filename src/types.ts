@@ -3,7 +3,7 @@ export type UserRequest = {
     username: string;
     password: string;
     is_admin: boolean;
-    avatar_url?: string;
+    avatar_url: string | null;
 };
 
 export type User = {
@@ -12,13 +12,15 @@ export type User = {
     username: string;
     is_admin: boolean;
     is_owner: boolean;
-    avatar_url?: string;
+    avatar_url: string | null;
+    telegram_id: number | null;
+    telegram_name: string | null;
 }
 
 export type DoctorRequest = {
     name: string;
     role: string;
-    avatar_url?: string;
+    avatar_url: string | null;
     is_enabled: boolean;
     service_ids: number[];
 };
@@ -27,7 +29,7 @@ export type Doctor = {
     id: number;
     name: string;
     role: string;
-    avatar_url?: string;
+    avatar_url: string | null;
     is_enabled: boolean;
     services: Service[];
 };
@@ -69,21 +71,21 @@ export type Source = {
 
 export type RewardRequest = {
     name: string;
-    image_url?: string;
+    image_url: string | null;
     is_enabled: boolean;
 };
 
 export type Reward = {
     id: number;
     name: string;
-    image_url?: string;
+    image_url: string | null;
     is_enabled: boolean;
 };
 
 export type PlatformRequest = {
     name: string;
     url: string;
-    image_url?: string;
+    image_url: string | null;
     is_enabled: boolean;
 };
 
@@ -91,7 +93,7 @@ export type Platform = {
     id: number;
     name: string;
     url: string;
-    image_url?: string;
+    image_url: string | null;
     is_enabled: boolean;
 };
 
@@ -122,22 +124,22 @@ export type Prompt = {
 
 export type Review = {
     id: number;
-    contact_name?: string | null;
-    contact_phone?: string | null;
-    review_text?: string | null;
+    contact_name: string | null;
+    contact_phone: string | null;
+    review_text: string | null;
     selected_doctors: Doctor[];
     selected_services: Service[];
     selected_aspects: Aspect[];
-    selected_source?: Source | null;
-    selected_reward?: Reward | null;
+    selected_source: Source | null;
+    selected_reward: Reward | null;
     published_platforms: Platform[];
 };
 
 export type Complaint = {
     id: number;
-    contact_name?: string;
-    contact_phone?: string;
-    complaint_text?: string;
+    contact_name: string | null;
+    contact_phone: string | null;
+    complaint_text: string | null;
     selected_reasons: Reason[];
 };
 
@@ -145,6 +147,15 @@ export type ReviewsDashboardResponse = {
     reviews: Review[];
     complaints: Complaint[];
 };
+
+export type ResetPasswordRequest = {
+    password: string
+    new_password: string
+}
+
+export type LinkTelegramResponse = {
+    start_link: string;
+}
 
 export type UploadImageResponse = {
     filename: string;

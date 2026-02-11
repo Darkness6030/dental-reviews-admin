@@ -121,7 +121,7 @@ export default function DashboardPage({ mode = "dashboard" }: DashboardPageProps
         <div className="mt-3 flex flex-col min-[600px]:flex-row min-[600px]:items-center gap-y-2 min-[600px]:gap-y-0 min-[600px]:gap-x-4">
           <RangeTabs value={selectedRange} handleSelect={setSelectedRange} />
           {dateFrom && dateTo && (
-            <div className="text-xs text-gray-400 break-words ml-4 min-[600px]:ml-0">
+            <div className="text-xs text-gray-400 break-words ml-3 min-[600px]:ml-0">
               {dateFrom} - {dateTo}
             </div>
           )}

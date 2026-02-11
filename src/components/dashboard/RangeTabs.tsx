@@ -24,7 +24,7 @@ export const RangeTabs: React.FC<RangeTabsProps> = ({ value, handleSelect }) => 
           <button
             key={tab.key}
             onClick={() => handleSelect(tab.key)}
-            className={`px-3 py-1.5 rounded-xl text-xs transition-colors ${isActive
+            className={`px-2 py-1.5 rounded-xl text-xs transition-colors ${isActive
               ? "bg-white shadow-sm text-gray-900"
               : "text-gray-500 hover:text-gray-700"
               }`}

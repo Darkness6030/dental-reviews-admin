@@ -1,8 +1,8 @@
 import axios from "axios";
-import type { Aspect, AspectRequest, Doctor, DoctorRequest, Platform, PlatformRequest, Prompt, PromptRequest, Reason, ReasonRequest, ReviewsDashboardResponse, Reward, RewardRequest, Service, ServiceRequest, Source, SourceRequest, UploadImageResponse, User, UserRequest } from "../types";
+import type { Aspect, AspectRequest, Doctor, DoctorRequest, LinkTelegramResponse, Platform, PlatformRequest, Prompt, PromptRequest, Reason, ReasonRequest, ResetPasswordRequest, ReviewsDashboardResponse, Reward, RewardRequest, Service, ServiceRequest, Source, SourceRequest, UploadImageResponse, User, UserRequest } from "../types";
 
 const client = axios.create({
-  baseURL: "https://feedback.ddaily.ru/api",
+  baseURL: "http://localhost:8080/api",
   headers: {
     "Content-Type": "application/json",
   },
@@ -41,10 +41,19 @@ export const login = async (username: string, password: string): Promise<User> =
   return user;
 };
 
-export const getUser = async (): Promise<User> => {
+export const getCurrentUser = async (): Promise<User> => {
   const { data } = await client.get("/user");
   return data;
-}
+};
+
+export const updateCurrentUser = async (userData: UserRequest): Promise<User> => {
+  const { data } = await client.post("/user/update", userData);
+  return data;
+};
+
+export const resetPassword = async (passwordData: ResetPasswordRequest): Promise<void> => {
+  await client.post("/password/reset", passwordData);
+};
 
 export const getUsers = async (): Promise<User[]> => {
   const { data } = await client.get("/admin/users");
@@ -281,11 +290,20 @@ export const exportComplaintsFile = async (dateAfter?: string, dateBefore?: stri
   downloadBlob(response.data, "complaints.xlsx");
 };
 
+export const linkTelegram = async (): Promise<LinkTelegramResponse> => {
+  const { data } = await client.get("/telegram/link");
+  return data;
+};
+
+export const unlinkTelegram = async (): Promise<void> => {
+  await client.post("/telegram/unlink");
+};
+
 export const uploadImageFile = async (file: File): Promise<UploadImageResponse> => {
   const formData = new FormData();
   formData.append("file", file);
 
-  const { data } = await client.post("/admin/images/upload", formData, {
+  const { data } = await client.post("/images/upload", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

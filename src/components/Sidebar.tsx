@@ -128,7 +128,13 @@ const Sidebar: React.FC<SidebarProps> = ({ currentUser, handleLogout, isUserLoad
           </div>
         ) : currentUser ? (
           <div>
-            <p className="px-5 py-1 text-xl text-left font-semibold">{currentUser.name}</p>
+            <Link
+              to="/profile"
+              onClick={() => setIsMobileOpen(false)}
+              className="block px-5 py-1 text-xl text-left font-semibold hover:bg-gray-100 rounded-2xl transition-colors duration-300"
+            >
+              {currentUser.name}
+            </Link>
             <button
               onClick={handleLogout}
               className="w-full px-5 py-1 rounded-2xl text-sm text-left font-light hover:bg-gray-100 transition-colors duration-300"
