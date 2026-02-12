@@ -101,12 +101,19 @@ export function ReviewsTable({ title = "Отзывы", reviews, handleExport }: 
                         ) : (
                           <div className="flex items-center gap-1">
                             {platforms.slice(0, 3).map((platform, index) => (
-                              <img
-                                key={`${platform.image_url}-${index}`}
-                                src={platform.image_url}
-                                alt={platform.name}
-                                className="h-5 w-5 rounded-sm object-contain"
-                              />
+                              <div key={`${platform.name}-${index}`}>
+                                {platform.image_url ? (
+                                  <img
+                                    src={platform.image_url}
+                                    alt={platform.name}
+                                    className="h-5 w-5 rounded-sm object-contain"
+                                  />
+                                ) : (
+                                  <div className="h-5 w-5 rounded-full bg-gray-200 flex items-center justify-center text-[10px] font-semibold text-gray-600">
+                                    {platform.name[0] ?? "?"}
+                                  </div>
+                                )}
+                              </div>
                             ))}
                             {platforms.length > 3 && (
                               <span className="text-xs text-gray-500">…</span>

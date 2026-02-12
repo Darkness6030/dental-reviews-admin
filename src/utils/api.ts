@@ -2,7 +2,7 @@ import axios from "axios";
 import type { Aspect, AspectRequest, Doctor, DoctorRequest, LinkTelegramResponse, Platform, PlatformRequest, Prompt, PromptRequest, Reason, ReasonRequest, ResetPasswordRequest, ReviewsDashboardResponse, Reward, RewardRequest, Service, ServiceRequest, Source, SourceRequest, UploadImageResponse, User, UserRequest } from "../types";
 
 const client = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: "https://feedback.ddaily.ru/api",
   headers: {
     "Content-Type": "application/json",
   },

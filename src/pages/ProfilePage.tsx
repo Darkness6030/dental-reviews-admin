@@ -241,7 +241,7 @@ export default function ProfilePage() {
                     onChange={(event) =>
                       setFormData((value) => ({ ...value, username: event.target.value }))
                     }
-                    placeholder="Username"
+                    placeholder="Имя пользователя"
                     className="rounded-xl border border-gray-200 px-3 py-2 text-sm"
                   />
 
