@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Aspect, AspectRequest, Doctor, DoctorRequest, LinkTelegramResponse, Platform, PlatformRequest, Prompt, PromptRequest, Reason, ReasonRequest, ResetPasswordRequest, ReviewsDashboardResponse, Reward, RewardRequest, Service, ServiceRequest, Source, SourceRequest, UploadImageResponse, User, UserRequest } from "../types";
+import type { Aspect, AspectRequest, Doctor, DoctorRequest, Platform, PlatformRequest, Prompt, PromptRequest, Reason, ReasonRequest, ResetPasswordRequest, ReviewsDashboardResponse, Reward, RewardRequest, Service, ServiceRequest, Source, SourceRequest, StartLinkResponse, UploadImageResponse, User, UserRequest } from "../types";
 
 const client = axios.create({
   baseURL: "https://feedback.ddaily.ru/api",
@@ -290,7 +290,16 @@ export const exportComplaintsFile = async (dateAfter?: string, dateBefore?: stri
   downloadBlob(response.data, "complaints.xlsx");
 };
 
-export const linkTelegram = async (): Promise<LinkTelegramResponse> => {
+export const linkMax = async (): Promise<StartLinkResponse> => {
+  const { data } = await client.get("/max/link");
+  return data;
+};
+
+export const unlinkMax = async (): Promise<void> => {
+  await client.post("/max/unlink");
+};
+
+export const linkTelegram = async (): Promise<StartLinkResponse> => {
   const { data } = await client.get("/telegram/link");
   return data;
 };

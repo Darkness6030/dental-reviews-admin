@@ -13,6 +13,8 @@ export type User = {
     is_admin: boolean;
     is_owner: boolean;
     avatar_url: string | null;
+    max_id: number | null;
+    max_name: string | null;
     telegram_id: number | null;
     telegram_name: string | null;
 }
@@ -153,7 +155,7 @@ export type ResetPasswordRequest = {
     new_password: string
 }
 
-export type LinkTelegramResponse = {
+export type StartLinkResponse = {
     start_link: string;
 }
 

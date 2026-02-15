@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useOutletContext } from "react-router-dom";
+import maxIcon from "../icons/max.svg";
+import telegramIcon from "../icons/telegram.svg";
 import type { ResetPasswordRequest, User, UserRequest } from "../types";
 import {
+  linkMax,
   linkTelegram,
   resetPassword,
+  unlinkMax,
   unlinkTelegram,
   updateCurrentUser,
   uploadImageFile,
@@ -21,12 +25,13 @@ export default function ProfilePage() {
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+
   const [isTelegramLoading, setIsTelegramLoading] = useState(false);
+  const [isMaxLoading, setIsMaxLoading] = useState(false);
 
   const [isSaving, setIsSaving] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
+  const [isUploading, setIsIsUploading] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
-
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const [formData, setFormData] = useState<UserRequest>({
@@ -58,18 +63,34 @@ export default function ProfilePage() {
     setPasswordData({ password: "", new_password: "" });
   };
 
-  const handleTelegramClick = async () => {
+  const handleSocialClick = async (
+    type: "telegram" | "max"
+  ) => {
+    const isLinked =
+      type === "telegram"
+        ? currentUser.telegram_id
+        : currentUser.max_id;
+
+    const setLoading =
+      type === "telegram"
+        ? setIsTelegramLoading
+        : setIsMaxLoading;
+
+    const linkFn = type === "telegram" ? linkTelegram : linkMax;
+    const unlinkFn = type === "telegram" ? unlinkTelegram : unlinkMax;
+
     try {
-      setIsTelegramLoading(true);
-      if (!currentUser.telegram_id) {
-        const { start_link } = await linkTelegram();
+      setLoading(true);
+
+      if (!isLinked) {
+        const { start_link } = await linkFn();
         window.open(start_link, "_blank");
       } else {
-        await unlinkTelegram();
+        await unlinkFn();
         window.location.reload();
       }
     } finally {
-      setIsTelegramLoading(false);
+      setLoading(false);
     }
   };
 
@@ -80,11 +101,11 @@ export default function ProfilePage() {
     if (!file) return;
 
     try {
-      setIsUploading(true);
+      setIsIsUploading(true);
       const uploadedImage = await uploadImageFile(file);
-      setFormData((value) => ({ ...value, avatar_url: uploadedImage.image_url }));
+      setFormData((v) => ({ ...v, avatar_url: uploadedImage.image_url }));
     } finally {
-      setIsUploading(false);
+      setIsIsUploading(false);
       event.target.value = "";
     }
   };
@@ -114,6 +135,25 @@ export default function ProfilePage() {
     }
   };
 
+  const socials = [
+    {
+      key: "telegram" as const,
+      label: "Telegram",
+      id: currentUser.telegram_id,
+      name: currentUser.telegram_name,
+      icon: telegramIcon,
+      loading: isTelegramLoading,
+    },
+    {
+      key: "max" as const,
+      label: "Max",
+      id: currentUser.max_id,
+      name: currentUser.max_name,
+      icon: maxIcon,
+      loading: isMaxLoading,
+    },
+  ];
+
   return (
     <div className="flex-1 bg-[#F5F5F5] px-[6%] py-10">
       <div className="max-w-3xl mx-auto">
@@ -141,28 +181,28 @@ export default function ProfilePage() {
             </p>
           </div>
 
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="rounded-2xl bg-gray-50 p-4">
-              <div className="text-xs font-semibold text-gray-500">
-                ID
-              </div>
-              <div className="mt-1 text-sm font-medium text-gray-900">
+          <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="flex items-center justify-center gap-2 rounded-xl bg-gray-50 px-3 py-2 text-sm">
+              <span className="text-gray-500">ID</span>
+              <span className="font-medium text-gray-900">
                 {currentUser.id}
-              </div>
+              </span>
             </div>
-            <div className="rounded-2xl bg-gray-50 p-4">
-              <div className="text-xs font-semibold text-gray-500">
-                Telegram
+
+            {socials.map((social) => (
+              <div
+                key={social.key}
+                className="flex items-center justify-center gap-2 rounded-xl bg-gray-50 px-3 py-2 text-sm"
+              >
+                <img src={social.icon} className="h-4 w-4 opacity-80" />
+                <span className="font-medium text-gray-900 truncate">
+                  {social.name ? `@${social.name}` : "Не привязан"}
+                </span>
               </div>
-              <div className="mt-1 text-sm font-medium text-gray-900">
-                {currentUser.telegram_name
-                  ? `@${currentUser.telegram_name}`
-                  : "Не привязан"}
-              </div>
-            </div>
+            ))}
           </div>
 
-          <div className="mt-6 space-y-3">
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <button
               onClick={() => setIsEditModalOpen(true)}
               className="w-full py-3 rounded-2xl border border-gray-200 text-sm font-medium hover:bg-gray-50"
@@ -177,24 +217,29 @@ export default function ProfilePage() {
               Сменить пароль
             </button>
 
-            <button
-              onClick={handleTelegramClick}
-              disabled={isTelegramLoading}
-              className={`w-full py-3 rounded-2xl text-sm font-medium disabled:opacity-50 ${currentUser.telegram_id
-                ? "border border-red-200 text-red-600 hover:bg-red-50"
-                : "bg-gradient-to-r from-[#F39416] to-[#F33716] text-white"
-                }`}
-            >
-              {isTelegramLoading
-                ? "Загрузка..."
-                : currentUser.telegram_id
-                  ? "Отвязать Telegram"
-                  : "Привязать Telegram"}
-            </button>
+            {socials.map((social) => (
+              <button
+                key={social.key}
+                onClick={() => handleSocialClick(social.key)}
+                disabled={social.loading}
+                className={`w-full py-3 rounded-2xl text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-50
+                  ${social.id
+                    ? "border border-red-200 text-red-600 hover:bg-red-50"
+                    : "bg-gradient-to-r from-[#F39416] to-[#F33716] text-white"
+                  }`}
+              >
+                <img src={social.icon} className="h-4 w-4" />
+                {social.loading
+                  ? "Загрузка..."
+                  : social.id
+                    ? `Отвязать ${social.label}`
+                    : `Привязать ${social.label}`}
+              </button>
+            ))}
 
             <button
               onClick={handleLogout}
-              className="w-full py-3 rounded-2xl text-sm font-medium text-red-600 border border-red-200 hover:bg-red-50"
+              className="w-full sm:col-span-2 py-3 rounded-2xl text-sm font-medium text-red-600 border border-red-200 hover:bg-red-50"
             >
               Выйти
             </button>
@@ -217,7 +262,6 @@ export default function ProfilePage() {
                   <div className="text-base font-semibold text-gray-900">
                     Редактировать профиль
                   </div>
-
                   <button
                     onClick={closeModals}
                     className="text-sm text-gray-400 hover:text-gray-600"
@@ -229,8 +273,8 @@ export default function ProfilePage() {
                 <div className="mt-4 grid gap-4">
                   <input
                     value={formData.name}
-                    onChange={(event) =>
-                      setFormData((value) => ({ ...value, name: event.target.value }))
+                    onChange={(e) =>
+                      setFormData((v) => ({ ...v, name: e.target.value }))
                     }
                     placeholder="ФИО"
                     className="rounded-xl border border-gray-200 px-3 py-2 text-sm"
@@ -238,8 +282,8 @@ export default function ProfilePage() {
 
                   <input
                     value={formData.username}
-                    onChange={(event) =>
-                      setFormData((value) => ({ ...value, username: event.target.value }))
+                    onChange={(e) =>
+                      setFormData((v) => ({ ...v, username: e.target.value }))
                     }
                     placeholder="Имя пользователя"
                     className="rounded-xl border border-gray-200 px-3 py-2 text-sm"
@@ -264,7 +308,7 @@ export default function ProfilePage() {
                     {formData.avatar_url && (
                       <button
                         onClick={() =>
-                          setFormData((value) => ({ ...value, avatar_url: null }))
+                          setFormData((v) => ({ ...v, avatar_url: null }))
                         }
                         className="rounded-xl bg-gray-100 px-3 py-2 text-sm"
                       >
@@ -300,7 +344,6 @@ export default function ProfilePage() {
                   <div className="text-base font-semibold text-gray-900">
                     Сменить пароль
                   </div>
-
                   <button
                     onClick={closeModals}
                     className="text-sm text-gray-400 hover:text-gray-600"
@@ -314,10 +357,10 @@ export default function ProfilePage() {
                     type="password"
                     placeholder="Текущий пароль"
                     value={passwordData.password}
-                    onChange={(event) =>
-                      setPasswordData((value) => ({
-                        ...value,
-                        password: event.target.value,
+                    onChange={(e) =>
+                      setPasswordData((v) => ({
+                        ...v,
+                        password: e.target.value,
                       }))
                     }
                     className="rounded-xl border border-gray-200 px-3 py-2 text-sm"
@@ -327,10 +370,10 @@ export default function ProfilePage() {
                     type="password"
                     placeholder="Новый пароль"
                     value={passwordData.new_password}
-                    onChange={(event) =>
-                      setPasswordData((value) => ({
-                        ...value,
-                        new_password: event.target.value,
+                    onChange={(e) =>
+                      setPasswordData((v) => ({
+                        ...v,
+                        new_password: e.target.value,
                       }))
                     }
                     className="rounded-xl border border-gray-200 px-3 py-2 text-sm"
