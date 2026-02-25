@@ -4,14 +4,15 @@ import AspectsPage from "./pages/AspectsPage"
 import DashboardPage from "./pages/DashboardPage"
 import DoctorsPage from "./pages/DoctorsPage"
 import LoginPage from "./pages/LoginPage"
+import NewsPage from "./pages/NewsPage"
 import PlatformsPage from "./pages/PlatformsPage"
+import ProfilePage from "./pages/ProfilePage"
 import PromptsPage from "./pages/PromptsPage"
 import ReasonsPage from "./pages/ReasonsPage"
 import RewardsPage from "./pages/RewardsPage"
 import ServicesPage from "./pages/ServicesPage"
 import SourcesPage from "./pages/SourcesPage"
 import UsersPage from "./pages/UsersPage"
-import ProfilePage from "./pages/ProfilePage"
 
 export const router = createBrowserRouter([
     {
@@ -30,7 +31,8 @@ export const router = createBrowserRouter([
             { path: "platforms", element: <PlatformsPage /> },
             { path: "reasons", element: <ReasonsPage /> },
             { path: "users", element: <UsersPage /> },
-            { path: "prompts", element: <PromptsPage /> }
+            { path: "prompts", element: <PromptsPage /> },
+            { path: "news", element: <NewsPage /> }
         ]
     }
 ])

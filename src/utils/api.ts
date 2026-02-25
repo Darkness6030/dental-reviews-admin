@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Aspect, AspectRequest, Doctor, DoctorRequest, Platform, PlatformRequest, Prompt, PromptRequest, Reason, ReasonRequest, ResetPasswordRequest, ReviewsDashboardResponse, Reward, RewardRequest, Service, ServiceRequest, Source, SourceRequest, StartLinkResponse, UploadImageResponse, User, UserRequest } from "../types";
+import type { Aspect, AspectRequest, Doctor, DoctorRequest, News, NewsRequest, Platform, PlatformRequest, Prompt, PromptRequest, Reason, ReasonRequest, ResetPasswordRequest, ReviewsDashboardResponse, Reward, RewardRequest, Service, ServiceRequest, Source, SourceRequest, StartLinkResponse, UploadImageResponse, User, UserRequest } from "../types";
 
 const client = axios.create({
   baseURL: "https://feedback.ddaily.ru/api",
@@ -233,6 +233,29 @@ export const deleteReason = async (reasonId: number): Promise<void> => {
 
 export const reorderReasons = async (orderedIds: number[]): Promise<void> => {
   await client.patch("/admin/reasons/reorder", { ordered_ids: orderedIds });
+};
+
+export const getNews = async (): Promise<News[]> => {
+  const { data } = await client.get("/news");
+  return data;
+};
+
+export const createNews = async (newsData: NewsRequest): Promise<News> => {
+  const { data } = await client.post("/admin/news", newsData);
+  return data;
+};
+
+export const updateNews = async (newsId: number, newsData: NewsRequest): Promise<News> => {
+  const { data } = await client.post(`/admin/news/${newsId}`, newsData);
+  return data;
+};
+
+export const deleteNews = async (newsId: number): Promise<void> => {
+  await client.delete(`/admin/news/${newsId}`);
+};
+
+export const reorderNews = async (orderedIds: number[]): Promise<void> => {
+  await client.patch("/admin/news/reorder", { ordered_ids: orderedIds });
 };
 
 export const getPrompts = async (): Promise<Prompt[]> => {

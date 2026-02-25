@@ -117,6 +117,16 @@ const Sidebar: React.FC<SidebarProps> = ({ currentUser, handleLogout, isUserLoad
               Промпты
             </Link>
           )}
+
+          {currentUser?.is_admin && (
+            <Link
+              to="/news"
+              className="block px-5 py-1 rounded-2xl text-sm font-light hover:bg-gray-100 transition-colors duration-300"
+              onClick={() => setIsMobileOpen(false)}
+            >
+              Новости
+            </Link>
+          )}
         </div>
       </div>
 

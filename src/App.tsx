@@ -6,6 +6,7 @@ import type {
   Aspect,
   Complaint,
   Doctor,
+  News,
   Platform,
   Reason,
   Review,
@@ -24,6 +25,8 @@ export default function App() {
   const [rewards, setRewards] = useState<Reward[]>([]);
   const [platforms, setPlatforms] = useState<Platform[]>([]);
   const [reasons, setReasons] = useState<Reason[]>([]);
+  const [news, setNews] = useState<News[]>([]);
+
   const [reviews, setReviews] = useState<Review[]>([]);
   const [complaints, setComplaints] = useState<Complaint[]>([]);
   const [users, setUsers] = useState<User[]>([]);
@@ -92,6 +95,8 @@ export default function App() {
               setPlatforms,
               reasons,
               setReasons,
+              news,
+              setNews,
               users,
               setUsers,
               reviews,

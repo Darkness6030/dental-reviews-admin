@@ -110,6 +110,17 @@ export type Reason = {
     is_enabled: boolean;
 };
 
+export type NewsRequest = {
+    title: string;
+    is_enabled: boolean;
+};
+
+export type News = {
+    id: number;
+    title: string;
+    is_enabled: boolean;
+};
+
 export type PromptRequest = {
     id: string;
     prompt_text: string;
